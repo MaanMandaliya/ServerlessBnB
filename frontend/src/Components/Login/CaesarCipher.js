@@ -1,23 +1,11 @@
 import {React} from 'react';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 function CaesarCipher(){
 
     const [strToEncrypt, setStrToEncrypt] = useState();
-   // const [encryptedStr, setEncryptedStr] = useState("");
-
-    /* useEffect(() => {
-
-        fetch('https://tutorial4-api.herokuapp.com/api/users/')  // get random String from backend lambda google cloud function
-            .then(response =>
-                response.json()
-            )
-            .then(responseJson => {
-                setStrToEncrypt(responseJson.data);
-                
-            })
-    }, []); */
 
         useEffect(() => {
             setStrToEncrypt(createCipherString())
@@ -60,15 +48,17 @@ function CaesarCipher(){
                 'userInput': encryptedStrForm.encryptedStr
             }
         };
-        fetch('https://europe-west2-cipher-356616.cloudfunctions.net/validateCipher', requestBody)  // hot cloud function to validate if entered encrypted value is same as system
+
+        let obj={
+            'username': localStorage.getItem('username'),
+            'cipherString': strToEncrypt,
+            'userInput': encryptedStrForm.encryptedStr
+        }
+        axios.post('https://europe-west2-cipher-356616.cloudfunctions.net/validateCipher', obj)  // hot cloud function to validate if entered encrypted value is same as system
             .then(response => {
-                if (response.status >= 400) {
-                    throw new Error("Server responds with error!");
-                }
-                //localStorage.setItem({"loggedIn":true});
-                console.log("Navigate to dashboard");
-               // navigate("dashboard");
-                //return response.json();
+                navigate("../dashboard");
+                
+                localStorage.setItem("group28-logged-in",true);
             })
             .catch(erroe => {
                 console.log(erroe);

@@ -42,12 +42,13 @@ function Login(){
           userToLogin.authenticateUser(authDetails, {
             onSuccess: data => {
               console.log("onSuccess:", data);
-              localStorage.setItem({"username":loginForm.email});
+              localStorage.setItem("username",loginForm.email);
               navigate("../questionnare");
             },
       
             onFailure: err => {
               console.error("onFailure:", err);
+              alert("Invalid credentials");
             },
       
             newPasswordRequired: data => {
@@ -97,6 +98,10 @@ function Login(){
                     <input type="password" name="password" value={loginForm.password} onChange={handleFormValueChange}></input>
                 </div>
                 <button type="submit">Submit</button>
+                <div>
+                    <label>New User?</label>
+                        <a style={{ 'paddingLeft': '14px', textDecoration: 'none'}} href='/registration'> Sign Up!</a>
+                </div>
             </div>
         </form>
     );
