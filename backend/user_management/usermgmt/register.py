@@ -43,11 +43,11 @@ def register(body):
     })
 
     # Store the secret key in firestore
-    url = "https://firestore.googleapis.com/v1/projects/usermanagement-356401/databases/(default)/documents/secretkeys"
+    url = "https://firestore.googleapis.com/v1/projects/usermanagement-356401/databases/(default)/documents/userAuthentication?documentId="+email
 
     payload = json.dumps({
         "fields": {
-            email: {
+            "secretkey": {
                 "stringValue": secret_key}}})
     headers = {
         'Content-Type': 'application/json'
