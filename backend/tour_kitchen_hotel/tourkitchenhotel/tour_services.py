@@ -34,7 +34,9 @@ def book_tour(body):
 
     if updateStatus:
         tour_invoice = {"status": "success",
-                        "message": "Thank you. You're tour has been booked successfully."}
+                        "message": "Thank you. You're tour has been booked successfully.",
+                        "invoice": f"Invoice: \n Booking ID: {booking_id} \n Tour ID: {tour_id} \n Total Price: {price}"
+                        }
     else:
         tour_invoice = {"status": "fail",
                         "message": "Sorry. There was some error. Please try again later. Sorry for the inconvenience."}
@@ -71,4 +73,9 @@ def tour_feedback(body):
     }
 
     status = createItem(Item, "tourfeedback")
-    return status
+    if status:
+        return {"status": "success",
+                "message": f"Thank you. You're feedback has been successfully sent."}
+    else:
+        return {"status": "fail",
+                "message": f"Sorry. There was some error in posting you're feedback. Please try again later."}

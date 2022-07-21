@@ -38,11 +38,12 @@ def order_food(body):
 
     if updateStatus:
         food_invoice = {"status": "success",
-                        "message": "Thank you. You're order will be delivered soon."}
+                        "message": "Thank you. You're order will be delivered soon.",
+                        "invoice": f"Invoice: \n Order ID: {order_id} \n Room No: {room_no} \n Total Price: {totalprice}"
+                        }
     else:
         food_invoice = {"status": "fail",
                         "message": "Sorry. There was some problem. Please try again later."}
-
     return food_invoice
 
 
@@ -75,6 +76,8 @@ def food_feedback(body):
 
     status = createItem(Item, "foodfeedback")
     if status:
-        return f"Your food feedback has been posted."
+        return {"status": "success",
+                "message": f"Thank you. You're feedback has been successfully sent."}
     else:
-        return "Your food feedback is not posted. Sorry for the inconvenience."
+        return {"status": "fail",
+                "message": f"Sorry. There was some error in posting you're feedback. Please try again later."}

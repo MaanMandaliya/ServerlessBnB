@@ -46,7 +46,9 @@ def book_room(body):
 
     if status and updateStatus:
         return {"status": "success",
-                "message": "Thank you. Room has been successfully booked."}
+                "message": f"Thank you. Room has been successfully booked.",
+                "invoice": f"Invoice: \n Booking ID: {booking_id} \n Room No: {room_no} \n Total Price: {totalprice} "
+                }
     else:
         return {"status": "success",
                 "message": "Your room booking is not processed. Sorry for the inconvenience."}
@@ -81,6 +83,8 @@ def room_feedback(body):
     status = createItem(Item, "roomfeedback")
 
     if status:
-        return f"Your hotel room feedback has been posted."
+        return {"status": "success",
+                "message": f"Thank you. You're feedback has been successfully sent."}
     else:
-        return "Your hotel room feedback is not posted. Sorry for the inconvenience."
+        return {"status": "fail",
+                "message": f"Sorry. There was some error in posting you're feedback. Please try again later."}
