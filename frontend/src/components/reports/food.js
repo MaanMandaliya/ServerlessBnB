@@ -10,6 +10,7 @@ export default function Food() {
         frameborder="0"
         style={{ border: 0 }}
         allowFullScreen
+        title="food-report"
       ></iframe>
     </div>
   );
