@@ -1,13 +1,13 @@
 import "./App.css";
-import Header from "./Components/Header/header";
-import Login from "./Components/Login/Login";
-import Questionnare from "./Components/Login/Questionnaire";
-import CaesarCipher from "./Components/Login/CaesarCipher";
-import Dashboard from "./Components/Dashboard/dashboard";
-import Registration from "./Components/Register/Register";
-import User from "./Components/Reports/user";
-import Food from "./Components/Reports/food";
-import Booking from "./Components/Reports/booking";
+import Header from "./Custom-Components/Header/header";
+import Login from "./Custom-Components/Login/Login";
+import Questionnare from "./Custom-Components/Login/Questionnaire";
+import CaesarCipher from "./Custom-Components/Login/CaesarCipher";
+import Dashboard from "./Custom-Components/Dashboard/dashboard";
+import Registration from "./Custom-Components/Register/Register";
+import User from "./Custom-Components/Reports/user";
+import Food from "./Custom-Components/Reports/food";
+import Booking from "./Custom-Components/Reports/booking";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 function App() {
   return (
