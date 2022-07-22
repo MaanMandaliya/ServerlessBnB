@@ -25,6 +25,28 @@
   border-radius:2%;
 }
 
+.f-form-body{
+  margin-top: 3% !important;
+  margin: auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius:2%;
+}
+
+.tableBdy button{
+  width:25%;
+}
+
+input[type=number] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 .errStyle{
   color:red;
   font-size:11px

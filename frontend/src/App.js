@@ -4,11 +4,14 @@ import Login from "./Custom-Components/Login/Login";
 import Questionnare from "./Custom-Components/Login/Questionnaire";
 import CaesarCipher from "./Custom-Components/Login/CaesarCipher";
 import Dashboard from "./Custom-Components/Dashboard/dashboard";
-import Registration from "./Custom-Components/Register/Register";
+import Registration from "./Custom-Components/Register/Registration";
 import User from "./Custom-Components/Reports/user";
 import Food from "./Custom-Components/Reports/food";
 import Booking from "./Custom-Components/Reports/booking";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import FoodMenuList from './Custom-Components/Food/foodMenu';
+import OrderFeedback from './Custom-Components/Food/orderFeedback';
+
 function App() {
   return (
     <div>
@@ -24,6 +27,8 @@ function App() {
           <Route path="/user-report" element={<User />}></Route>
           <Route path="/food-report" element={<Food />} />
           <Route path="/booking-report" element={<Booking />} />
+          <Route path="/foodMenuList" element={<FoodMenuList/>} />
+        <Route path="/orderFeedback" element={<OrderFeedback/>} />
         </Routes>
       </Router>
     </div>
