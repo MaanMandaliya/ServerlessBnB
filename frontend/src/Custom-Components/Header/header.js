@@ -12,7 +12,7 @@ import Button from "@mui/material/Button";
 
 import { useNavigate } from "react-router-dom";
 
-const pages = ["Menu1", "Menu2", "Menu3"];
+const pages = ["User Report", "Food Report", "Hotel Booking Report"];
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,11 +20,11 @@ const Header = () => {
 
   const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
-    if (page === "Menu1") {
+    if (page === "User Report") {
       navigate("/user-report");
-    } else if (page === "Menu2") {
+    } else if (page === "Food Report") {
       navigate("/food-report");
-    } else if (page === "Menu3") {
+    } else if (page === "Hotel Booking Report") {
       navigate("/booking-report");
     }
   };
@@ -126,7 +126,7 @@ const Header = () => {
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {/* TODO add necessary page menu options */}
-            {pages.map((page) => (
+            {localStorage.getItem("group28-logged-in") == "true" && pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => {
@@ -138,7 +138,15 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-
+          {localStorage.getItem("group28-logged-in") == "true" && (
+            <Button
+              onClick={logout}
+              style={{ width: "30px", position: "absolute", right: 0 }}
+              color="inherit"
+            >
+              Hotel Booking
+            </Button>
+          )}
           {localStorage.getItem("group28-logged-in") == "true" ? (
             <Button
               onClick={logout}
