@@ -9,8 +9,10 @@ import User from "./Custom-Components/Reports/user";
 import Food from "./Custom-Components/Reports/food";
 import Booking from "./Custom-Components/Reports/booking";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import FoodMenuList from './Custom-Components/Food/foodMenu';
-import OrderFeedback from './Custom-Components/Food/orderFeedback';
+import FoodMenuList from "./Custom-Components/Food/foodMenu";
+import OrderFeedback from "./Custom-Components/Food/orderFeedback";
+import Rooms from "./Custom-Components/Hotel/Rooms";
+import RoomFeedback from "./Custom-Components/Hotel/RoomFeedback";
 
 function App() {
   return (
@@ -27,8 +29,10 @@ function App() {
           <Route path="/user-report" element={<User />}></Route>
           <Route path="/food-report" element={<Food />} />
           <Route path="/booking-report" element={<Booking />} />
-          <Route path="/foodMenuList" element={<FoodMenuList/>} />
-        <Route path="/orderFeedback" element={<OrderFeedback/>} />
+          <Route path="/foodMenuList" element={<FoodMenuList />} />
+          <Route path="/orderFeedback" element={<OrderFeedback />} />
+          <Route path="/hotelBooking" element={<Rooms />} />
+          <Route path="/hotelFeedback" element={<RoomFeedback />} />
         </Routes>
       </Router>
     </div>
