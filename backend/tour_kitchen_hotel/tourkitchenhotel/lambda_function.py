@@ -1,7 +1,7 @@
 import json
 from kitchen_services import show_food_menu, order_food, food_feedback
 from hotel_services import show_rooms, book_room, room_feedback
-from tour_services import show_tours, book_tour, tour_feedback
+from tour_services import show_tours, book_tour, tour_feedback, recommend_tours
 
 
 def lambda_handler(event, context):
@@ -30,6 +30,9 @@ def lambda_handler(event, context):
         return tour_invoice
     elif path == "/tourfeedback":
         response = tour_feedback(body)
+        return response
+    elif path == "/recommendtours":
+        response = recommend_tours(body)
         return response
 
     elif path == "/showfoodmenu":

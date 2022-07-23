@@ -3,6 +3,7 @@ import uuid
 import requests
 import json
 from decimal import Decimal
+import random
 
 
 def show_tours():
@@ -79,3 +80,32 @@ def tour_feedback(body):
     else:
         return {"status": "fail",
                 "message": f"Sorry. There was some error in posting you're feedback. Please try again later."}
+
+
+def recommend_tours(body):
+    tour_ids = []
+    tours = []
+    no_of_days = body['no_of_days']
+    index = random.randint(1, 999)
+
+    url = "https://us-central1-assignment4-5410serverless-sid.cloudfunctions.net/tour_recommendation"
+    payload = json.dumps({
+        "index": str(index),
+        "days": str(no_of_days)
+    })
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjYzMWZhZTliNTk0MGEyZDFmYmZmYjAwNDAzZDRjZjgwYTIxYmUwNGUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiNjE4MTA0NzA4MDU0LTlyOXMxYzRhbGczNmVybGl1Y2hvOXQ1Mm4zMm42ZGdxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiNjE4MTA0NzA4MDU0LTlyOXMxYzRhbGczNmVybGl1Y2hvOXQ1Mm4zMm42ZGdxLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA4MzUzODg5NjI1MTY4NzM5OTM4IiwiZW1haWwiOiJtYWhhbnRzaWRoYXJ0aEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IlIwUHNSSW1uc2JBbXE0Sl8tQmdSQ3ciLCJpYXQiOjE2NTg0MTQ0OTgsImV4cCI6MTY1ODQxODA5OCwianRpIjoiOTA1MDk3MGUzZTJkZDMyMmQ5YWQwMGQ4OGI1OGMyMjQ3ZGQxYzM4ZCJ9.Bb1a9yM3hrga3S-7umcIh0xTMzTX4Pls_WXiSIrmqEdv6UThwbf9YPlVq5a7nO1uLtGtw_4F0XftXLKSpAjNgCPf35snWEdCauK4vl9xywCaD_PazbHxbj4zGDfeyGPbz3EE-J9_vCbGT3UVFVuQRKfWhOpNgr2-1fegAGrn6F42hK31hecaV8InND5j06b5GElzIvUY99TtLQWEgK2mkxu28s53YcKOnaAmANrrsxzqCds3a1pm5CNJy-SyWeB7XDX49sE3zT1Cl9wRe_j6x8-VnJFGOTck91eoE6uTnUfWEdH3NXOTrjXsKRNydlhUc8dowmJv7e5GMwl-UVbP0Q'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    dict_tours = json.loads(response.text)
+
+    recommended_tours = sorted(
+        dict_tours.items(), key=lambda x: x[1], reverse=True)
+    for tour in recommended_tours:
+        tour_ids.append(tour[0])
+
+    for tour_id in tour_ids:
+        tours.append(queryItems("tour_id", str(tour_id), "eq", "tours"))
+    return tours
