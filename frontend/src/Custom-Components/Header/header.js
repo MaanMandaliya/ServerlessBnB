@@ -138,15 +138,7 @@ const Header = () => {
               </Button>
             ))}
           </Box>
-          {localStorage.getItem("group28-logged-in") == "true" && (
-            <Button
-              onClick={logout}
-              style={{ width: "30px", position: "absolute", right: 0 }}
-              color="inherit"
-            >
-              Hotel Booking
-            </Button>
-          )}
+          
           {localStorage.getItem("group28-logged-in") == "true" ? (
             <Button
               onClick={logout}

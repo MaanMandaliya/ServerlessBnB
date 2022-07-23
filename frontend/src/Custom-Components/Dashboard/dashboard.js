@@ -5,6 +5,17 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
 function Dashboard() {
   return (
     <div>
@@ -17,98 +28,52 @@ function Dashboard() {
         justifyItems="center"
         style={{ marginTop: "80px", aligItems: "center" }}
       >
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div"></Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div"></Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div"></Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
-        <Card sx={{ minWidth: 275 }}>
-          <CardContent>
-            <Typography
-              sx={{ fontSize: 14 }}
-              color="text.secondary"
-              gutterBottom
-            >
-              Word of the Day
-            </Typography>
-            <Typography variant="h5" component="div"></Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              adjective
-            </Typography>
-            <Typography variant="body2">
-              well meaning and kindly.
-              <br />
-              {'"a benevolent smile"'}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Card>
+        <Grid item xs={4} md={4} xl={4}>
+          <Item>
+            <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography variant="h5" component="div"></Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Food ordering
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Order Now</Button>
+              </CardActions>
+            </Card>
+          </Item>
+        </Grid>
+        <Grid item xs={4} md={4} xl={4}>
+          <Item>
+            <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography variant="h5" component="div"></Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Room Booking
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Book Now</Button>
+              </CardActions>
+            </Card>
+          </Item>
+        </Grid>
+        <Grid item xs={4} md={4} xl={4}>
+          <Item>
+            <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography variant="h5" component="div"></Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Tour Booking
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Book Now</Button>
+              </CardActions>
+            </Card>
+          </Item>
+        </Grid>
+       
       </Grid>
     </div>
   );

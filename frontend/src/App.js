@@ -14,7 +14,6 @@ import OrderFeedback from "./Custom-Components/Food/orderFeedback";
 import Rooms from "./Custom-Components/Hotel/Rooms";
 import RoomFeedback from "./Custom-Components/Hotel/RoomFeedback";
 
-
 function App() {
   return (
     <div>
@@ -36,7 +35,6 @@ function App() {
           <Route path="/hotelFeedback" element={<RoomFeedback />} />
         </Routes>
       </Router>
-
     </div>
   );
 }
