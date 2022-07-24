@@ -18,19 +18,21 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Dashboard() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleAction=(type)=>{
-        if(type=='food'){
-            navigate('../foodMenuList');
-        }else if(type=='tour'){
-
-        }else if(type=='room'){
-
-        }else if(type=='orderFeedback'){
-            navigate('../orderFeedback');
-        }
+  const handleAction = (type) => {
+    if (type == "food") {
+      navigate("../foodMenuList");
+    } else if (type == "hotelBooking") {
+      navigate("../hotelBooking");
+    } else if (type == "TourBooking") {
+      navigate("../tourBooking");
+    } else if (type == "orderFeedback") {
+      navigate("../orderFeedback");
+    } else if (type == "hotelFeedback"){
+      navigate("../hotelFeedback");
     }
+  };
   return (
     <div>
       <h1 style={{ textAlign: "center", marginTop: "4%" }}>
@@ -42,12 +44,18 @@ function Dashboard() {
         justifyItems="center"
         style={{ marginTop: "80px", aligItems: "center" }}
       >
-        <Grid onClick={() => {
-                    handleAction('food');
-                  }} item xs={4} md={4} xl={4}>
+        <Grid
+          onClick={() => {
+            handleAction("food");
+          }}
+          item
+          xs={4}
+          md={4}
+          xl={4}
+        >
           <Item>
             <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+              <CardContent>
                 <Typography variant="h5" component="div"></Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Food ordering
@@ -59,10 +67,18 @@ function Dashboard() {
             </Card>
           </Item>
         </Grid>
-        <Grid item xs={4} md={4} xl={4}>
+        <Grid
+          onClick={() => {
+            handleAction("hotelBooking");
+          }}
+          item
+          xs={4}
+          md={4}
+          xl={4}
+        >
           <Item>
             <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+              <CardContent>
                 <Typography variant="h5" component="div"></Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Room Booking
@@ -74,10 +90,18 @@ function Dashboard() {
             </Card>
           </Item>
         </Grid>
-        <Grid item xs={4} md={4} xl={4}>
+        <Grid
+          onClick={() => {
+            handleAction("TourBooking");
+          }}
+          item
+          xs={4}
+          md={4}
+          xl={4}
+        >
           <Item>
             <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+              <CardContent>
                 <Typography variant="h5" component="div"></Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Tour Booking
@@ -89,12 +113,18 @@ function Dashboard() {
             </Card>
           </Item>
         </Grid>
-        <Grid onClick={() => {
-                    handleAction('orderFeedback');
-                  }} item xs={4} md={4} xl={4}>
+        <Grid
+          onClick={() => {
+            handleAction("orderFeedback");
+          }}
+          item
+          xs={4}
+          md={4}
+          xl={4}
+        >
           <Item>
             <Card sx={{ minWidth: 275 }}>
-            <CardContent>
+              <CardContent>
                 <Typography variant="h5" component="div"></Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Food order feedback
@@ -106,7 +136,29 @@ function Dashboard() {
             </Card>
           </Item>
         </Grid>
-       
+        <Grid
+          onClick={() => {
+            handleAction("hotelFeedback");
+          }}
+          item
+          xs={4}
+          md={4}
+          xl={4}
+        >
+          <Item>
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <Typography variant="h5" component="div"></Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Hotel Booking feedback
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Feedback</Button>
+              </CardActions>
+            </Card>
+          </Item>
+        </Grid>
       </Grid>
     </div>
   );

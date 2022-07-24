@@ -24,7 +24,7 @@ function RoomFeedback() {
   const [open, setOpen] = useState(false);
   const [orderId, setOrderId] = useState(0);
   const [feedback, setFeedback] = useState("");
-
+  const [review, setReviews] = useState([]);
   let preventApiCall = false;
   let navigate = useNavigate();
 
@@ -33,21 +33,29 @@ function RoomFeedback() {
       preventApiCall = true;
       axios
         .get(
-          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/showfoodmenu"
+          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/roombookings"
         ) // list of food user for that user
         .then((response) => {
           console.log(response);
-          setHotelList(response.data);
+          setHotelList(response.data.roombookings);
         })
         .catch((err) => {
           console.log(err);
         });
+     
     }
+     axios
+        .get(
+          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/roomfeedbacks"
+        ) // list of food user for that user
+        .then((response) => {
+          console.log(response);
+          setReviews(response.data.room_feedbacks);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
   }, []);
-
-  const navigateToFoodOrder = (food) => {
-    navigate("/orderFood", { state: food });
-  };
 
   const handleFeedbackChange = (feedback) => {
     console.log(feedback);
@@ -66,60 +74,59 @@ function RoomFeedback() {
 
   const provideFeedback = (event) => {
     event.preventDefault();
-
     let feedbackBdy = {
-      order_id: orderId,
+      room_no: orderId.room_no,
       feedback: feedback,
+      username: localStorage.getItem("username"),
     };
 
-    console.log(feedbackBdy);
-    if (feedback) {
-      axios
-        .post(
-          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/foodfeedback",
-          feedbackBdy
-        ) // call aws lmabda function to validate answers
-        .then((response) => {
-          console.log("Feedback placed");
-          alert("Thank you for providing feedback");
-          //navigate("../login");
-          setOpen(false);
-        })
-        .catch((erroe) => {
-          console.log(erroe + " Feedback failed");
-          alert("Registration Failed");
-        });
-    }
+    axios
+      .post(
+        "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/roomfeedback",
+        feedbackBdy
+      ) // call aws lmabda function to validate answers
+      .then((response) => {
+        console.log("Feedback placed");
+        alert("Thank you for providing feedback");
+        //navigate("../login");
+        setOpen(false);
+      })
+      .catch((erroe) => {
+        console.log(erroe + " Feedback failed");
+        alert("Registration Failed");
+      });
   };
 
   return (
     <div className="list-body">
+        <h5>My Room Bookings</h5>
       <div className="tableBdy">
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Booking Id </TableCell>
-                <TableCell align="right">Room Type</TableCell>
+                <TableCell>Room Number</TableCell>
+                <TableCell align="right">Customer </TableCell>
                 <TableCell align="right">Price</TableCell>
                 <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {hotelList.map((order) => (
+              {hotelList.map((room, id) => (
                 <TableRow
+                  key={id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {order.room_id}
+                    {room.room_no}
                   </TableCell>
                   <TableCell className="table-cell-style" align="right">
-                    {order.room_type}
+                    {room.customer_id}
                   </TableCell>
-                  <TableCell align="right">{order.price}</TableCell>
+                  <TableCell align="right">{room.totalprice}</TableCell>
                   <TableCell align="right">
                     <button
-                      onClick={() => handleClickOpen(order)}
+                      onClick={() => handleClickOpen(room)}
                       style={{ display: "inline-block" }}
                       color="inherit"
                     >
@@ -161,6 +168,37 @@ function RoomFeedback() {
           </button>
         </DialogActions>
       </Dialog>
+      <br></br>
+      <h5>Room Feedbacks</h5>
+      <div className="tableBdy">
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Booking Id</TableCell>
+                <TableCell align="right">Feedback </TableCell>
+                <TableCell align="right">Sentiment</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {review.map((room, id) => (
+                <TableRow
+                  key={id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {room.booking_id}
+                  </TableCell>
+                  <TableCell className="table-cell-style" align="right">
+                    {room.feedback}
+                  </TableCell>
+                  <TableCell align="right">{room.feedback_score}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
     </div>
   );
 }

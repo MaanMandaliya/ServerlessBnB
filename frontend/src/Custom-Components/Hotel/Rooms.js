@@ -14,8 +14,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
-
-
+import { Calendar } from "primereact/calendar";
+import * as moment from "moment-timezone";
 function Rooms() {
   const [hotelBookingList, setHotelBookingList] = useState([]);
   const [open, setOpen] = useState(false);
@@ -23,6 +23,8 @@ function Rooms() {
   const [quantity, setQuantity] = useState(0);
   const [hotelData, setHotelData] = useState({});
   const [value, setValue] = useState(new Date("2014-08-18T21:11:54"));
+  const [fromdate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
   let preventApiCall = false;
   let navigate = useNavigate();
 
@@ -57,9 +59,9 @@ function Rooms() {
     setQuantity(qty.target.value);
   };
 
-  const handleClickOpen = (food) => {
-    console.log(food);
-    setHotelData(food);
+  const handleClickOpen = (hotel) => {
+    console.log(hotel);
+    setHotelData(hotel);
     setOpen(true);
   };
 
@@ -69,25 +71,29 @@ function Rooms() {
 
   const placeAnOrder = (event) => {
     event.preventDefault();
-    console.log(hotelData);
-    let hotelBody = {};
+
+    let hotelBody = {
+      from_date: moment(fromdate).format().split("T")[0],
+      to_date: moment(toDate).format().split("T")[0],
+      room_type: hotelData.room_type,
+      username: localStorage.getItem("username"),
+    };
 
     console.log(hotelBody);
-    if (roomNumber && quantity) {
-      axios
-        .post(
-          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/bookRoom",
-          hotelBody
-        ) // call aws lmabda function to validate answers
-        .then((response) => {
-          console.log(response);
-          setOpen(false);
-        })
-        .catch((erroe) => {
-          console.log(erroe + " Resitration failed response");
-          alert("Registration Failed");
-        });
-    }
+
+    axios
+      .post(
+        "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/bookroom",
+        hotelBody
+      ) // call aws lmabda function to validate answers
+      .then((response) => {
+        console.log(response);
+        setOpen(false);
+      })
+      .catch((erroe) => {
+        console.log(erroe + " Resitration failed response");
+        alert("Registration Failed");
+      });
   };
 
   return (
@@ -104,9 +110,9 @@ function Rooms() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {hotelBookingList.map((hotel) => (
+              {hotelBookingList.map((hotel, id) => (
                 <TableRow
-                  key={hotel.id}
+                  key={id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
@@ -122,7 +128,7 @@ function Rooms() {
                       style={{ display: "inline-block" }}
                       color="inherit"
                     >
-                      Order
+                      Book
                     </button>
                   </TableCell>
                 </TableRow>
@@ -132,7 +138,7 @@ function Rooms() {
         </TableContainer>
       </div>
 
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
         <DialogTitle>Book room</DialogTitle>
         <DialogContent>
           <DialogContentText>Please Enter length of stay</DialogContentText>
@@ -140,25 +146,23 @@ function Rooms() {
           <div className="f-form-body">
             <div>
               <label>From Date</label>
- 
+              <Calendar
+                id="basic"
+                appendTo="self"
+                value={fromdate}
+                onChange={(e) => setFromDate(e.value)}
+              />
             </div>
             <div>
               <label>To Date</label>
-              <input
-                type="text"
-                value={quantity}
-                name="quantity"
-                onChange={handleQuantityChange}
-              ></input>
-            </div>
-            <div>
-              <label>Quantity</label>
-              <input
-                type="text"
-                value={quantity}
-                name="quantity"
-                onChange={handleQuantityChange}
-              ></input>
+              <Calendar
+                id="basic"
+                appendTo="self"
+                value={toDate}
+                onChange={(e) => {
+                  setToDate(e.value);
+                }}
+              />
             </div>
           </div>
         </DialogContent>

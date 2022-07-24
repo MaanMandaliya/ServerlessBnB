@@ -1,4 +1,7 @@
 import "./App.css";
+import "primereact/resources/themes/md-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";                                //icons
 import Header from "./Custom-Components/Header/header";
 import Login from "./Custom-Components/Login/Login";
 import Questionnare from "./Custom-Components/Login/Questionnaire";
@@ -34,7 +37,7 @@ function App() {
           <Route path="/orderFeedback" element={<OrderFeedback />} />
           <Route path="/hotelBooking" element={<Rooms />} />
           <Route path="/hotelFeedback" element={<RoomFeedback />} />
-          <Route path="/TourBooking" element={<TourBooking />} />
+          <Route path="/tourBooking" element={<TourBooking />} />
         </Routes>
       </Router>
     </div>
