@@ -17,6 +17,7 @@ import OrderFeedback from "./Custom-Components/Food/orderFeedback";
 import Rooms from "./Custom-Components/Hotel/Rooms";
 import RoomFeedback from "./Custom-Components/Hotel/RoomFeedback";
 import TourBooking from "./Custom-Components/Tour/TourBooking";
+import TourFeedback from "./Custom-Components/Tour/TourFeedback";
 
 function App() {
   return (
@@ -37,7 +38,8 @@ function App() {
           <Route path="/orderFeedback" element={<OrderFeedback />} />
           <Route path="/hotelBooking" element={<Rooms />} />
           <Route path="/hotelFeedback" element={<RoomFeedback />} />
-          <Route path="/tourBooking" element={<TourBooking />} />
+          <Route path="/TourBooking" element={<TourBooking />} />
+          <Route path="/TourFeedback" element={<TourFeedback />} />
         </Routes>
       </Router>
     </div>

@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
-
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -16,10 +15,8 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-
 function Dashboard() {
   const navigate = useNavigate();
-
   const handleAction = (type) => {
     if (type == "food") {
       navigate("../foodMenuList");
@@ -31,6 +28,9 @@ function Dashboard() {
       navigate("../orderFeedback");
     } else if (type == "hotelFeedback"){
       navigate("../hotelFeedback");
+    }
+    else if (type == "TourFeedback"){
+      navigate("../TourFeedback");
     }
   };
   return (
@@ -159,9 +159,31 @@ function Dashboard() {
             </Card>
           </Item>
         </Grid>
+        <Grid
+          onClick={() => {
+            handleAction("TourFeedback");
+          }}
+          item
+          xs={4}
+          md={4}
+          xl={4}
+        >
+          <Item>
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <Typography variant="h5" component="div"></Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Tour feedback
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Feedback</Button>
+              </CardActions>
+            </Card>
+          </Item>
+        </Grid>
       </Grid>
     </div>
   );
 }
-
 export default Dashboard;
