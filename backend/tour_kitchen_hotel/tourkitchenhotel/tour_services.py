@@ -13,7 +13,7 @@ def show_tours():
 
 def book_tour(body):
     booking_id = str(uuid.uuid4())
-    customer_id = "Random123"  # update it with actual id
+    customer_id = body['username']
     tour_name = body['tour_name']
     tourInfo = queryItems("tour_name", tour_name, "eq", "tours")[0]
     tour_id = tourInfo['tour_id']
@@ -25,6 +25,7 @@ def book_tour(body):
         "booking_id": booking_id,
         "customer_id": customer_id,
         "tour_id": tour_id,
+        "tour_name": tour_name,
         "price": price
     }
     status = createItem(Item, "toursbooking")
@@ -34,9 +35,26 @@ def book_tour(body):
         "capacity", tourInfo['capacity'] - 1, "tour_id", tour_id, "tours")
 
     if updateStatus:
+
+        # send notification
+        customer_id = customer_id.replace("@", "")
+        url = "https://us-central1-a2-b00897744.cloudfunctions.net/message-passing/api/pubsub/topic"
+        payload = json.dumps({
+            "userToken": "pubsub-topic-" + str(customer_id),
+            "message": {
+                "message": "Your tour has been booked!",
+                "category": "tour"
+            }
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        # send invoice
         tour_invoice = {"status": "success",
                         "message": "Thank you. You're tour has been booked successfully.",
-                        "invoice": f"Invoice: \n Booking ID: {booking_id} \n Tour ID: {tour_id} \n Total Price: {price}"
+                        "invoice": f"Invoice: \n Booking ID: {booking_id} \n Tour Name: {tour_name} \n Total Price: {price}"
                         }
     else:
         tour_invoice = {"status": "fail",
@@ -49,7 +67,12 @@ def tour_feedback(body):
 
     feedback_id = str(uuid.uuid4())
     feedback = body['feedback']
-    booking_id = body['booking_id']
+    customer_id = body['username']
+    tour_name = body['tour_name']
+    bookings = queryItems("tour_name", tour_name, "eq", "toursbooking")
+    booking = list(
+        filter(lambda booking: booking['customer_id'] == customer_id, bookings))
+    booking_id = booking[0]['booking_id']
 
     url = "https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDVnYWMXz1cDr4j-3jinkQn_F-60AkCyp0"
     payload = json.dumps({
@@ -109,3 +132,9 @@ def recommend_tours(body):
     for tour_id in tour_ids:
         tours.append(queryItems("tour_id", str(tour_id), "eq", "tours"))
     return tours
+
+
+def show_all_tour_reviews():
+    # Show all reviews
+    tour_feedbacks = readAllItems("tourfeedback")
+    return {"status": "success", "tour_feedbacks": tour_feedbacks}

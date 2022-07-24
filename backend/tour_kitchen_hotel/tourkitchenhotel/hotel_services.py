@@ -9,13 +9,20 @@ import random
 
 
 def show_rooms():
+    # Show all rooms with count greater than 0
     rooms = queryItems("room_count", 0, "gt", "rooms")
     return rooms
 
 
+def get_room_bookings():
+    # Show all room bookings
+    room_bookings = readAllItems("roomsbooking")
+    return {"status": "success", "roombookings": room_bookings}
+
+
 def book_room(body):
     booking_id = str(uuid.uuid4())
-    customer_id = "Random123"
+    customer_id = body['username']
     roomType = body['room_type']
     from_date = body['from_date']
     from_date_ls = list(map(lambda x: int(x), from_date.split("-")))
@@ -45,6 +52,23 @@ def book_room(body):
         "room_count", roomInfo['room_count'] - 1, "room_id", room_id, "rooms")
 
     if status and updateStatus:
+
+        # send notification
+        customer_id = customer_id.replace("@", "")
+        url = "https://us-central1-a2-b00897744.cloudfunctions.net/message-passing/api/pubsub/topic"
+        payload = json.dumps({
+            "userToken": "pubsub-topic-" + str(customer_id),
+            "message": {
+                "message": "Your room has been booked!",
+                "category": "hotel"
+            }
+        })
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+
+        # send invoice
         return {"status": "success",
                 "message": f"Thank you. Room has been successfully booked.",
                 "invoice": f"Invoice: \n Booking ID: {booking_id} \n Room No: {room_no} \n Total Price: {totalprice} "
@@ -56,9 +80,15 @@ def book_room(body):
 
 def room_feedback(body):
     feedback_id = str(uuid.uuid4())
+    customer_id = body['username']
     feedback = body['feedback']
-    booking_id = body['booking_id']
+    room_no = int(body['room_no'])
+    bookings = queryItems("room_no", room_no, "eq", "roomsbooking")
+    booking = list(
+        filter(lambda booking: booking['customer_id'] == customer_id, bookings))
+    booking_id = booking[0]['booking_id']
 
+    # Calculate the sentiment
     url = "https://language.googleapis.com/v1/documents:analyzeSentiment?key=AIzaSyDVnYWMXz1cDr4j-3jinkQn_F-60AkCyp0"
     payload = json.dumps({
         "document": {
@@ -88,3 +118,9 @@ def room_feedback(body):
     else:
         return {"status": "fail",
                 "message": f"Sorry. There was some error in posting you're feedback. Please try again later."}
+
+
+def show_all_room_reviews():
+    # Show all reviews
+    room_feedbacks = readAllItems("roomfeedback")
+    return {"status": "success", "room_feedbacks": room_feedbacks}
