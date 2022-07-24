@@ -13,6 +13,7 @@ import FoodMenuList from "./Custom-Components/Food/foodMenu";
 import OrderFeedback from "./Custom-Components/Food/orderFeedback";
 import Rooms from "./Custom-Components/Hotel/Rooms";
 import RoomFeedback from "./Custom-Components/Hotel/RoomFeedback";
+import TourBooking from "./Custom-Components/Tour/TourBooking";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/orderFeedback" element={<OrderFeedback />} />
           <Route path="/hotelBooking" element={<Rooms />} />
           <Route path="/hotelFeedback" element={<RoomFeedback />} />
+          <Route path="/TourBooking" element={<TourBooking />} />
         </Routes>
       </Router>
     </div>

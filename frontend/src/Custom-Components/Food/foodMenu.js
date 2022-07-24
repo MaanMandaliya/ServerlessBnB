@@ -16,11 +16,12 @@ import Paper from '@mui/material/Paper';
 import axios from "axios";
 
 function FoodMenuList() {
-    const [foodMenuList, setFoodMenuList] = useState([{"food_name":"Pasta","quantity":10,"price":15,"food_id":"2"},{"food_name":"Pizza","quantity":4,"price":25,"food_id":"1"},{"food_name":"Garlic Bread","quantity":8,"price":10,"food_id":"3"}]);
+    const [foodMenuList, setFoodMenuList] = useState([]);
     const [open, setOpen] = useState(false);
     const [roomNumber, setRoomNumber] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [tmpFood, setTempFood] = useState({});
+    
     
     let preventApiCall=false;
     let navigate = useNavigate();
@@ -71,21 +72,22 @@ function FoodMenuList() {
         let foodBdy={
             "room_no": roomNumber,
             "food_name": tmpFood.food_name,
-            "quantity": quantity
+            "quantity": quantity,
+            "username":localStorage.getItem("username")
         };
 
-        console.log(foodBdy );
+        console.log(foodBdy);
         if(roomNumber && quantity){
             axios.post('https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/orderfood', foodBdy)  // call aws lmabda function to validate answers
                         .then(response => {
                             console.log("Food ordered");
                             alert("Thank you for placing the Food order");
-                            //navigate("../login");
+                            navigate("../dashboard");
                             setOpen(false);
                         })
                         .catch(erroe => {
                             console.log(erroe + " Resitration failed response");
-                            alert("Registration Failed");
+                            alert("Couldn'd place and order");
                 });
         }
        

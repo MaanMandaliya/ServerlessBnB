@@ -49,7 +49,7 @@ const Header = () => {
   const logout = () => {
     localStorage.setItem("group28-logged-in", false);
     localStorage.setItem("username", "");
-    navigate("../login");
+    navigate("../dashboard");
   };
 
   let [messages, setMessages] = useState([]);
