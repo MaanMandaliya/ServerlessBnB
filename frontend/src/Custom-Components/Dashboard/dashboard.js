@@ -36,7 +36,7 @@ function Dashboard() {
   return (
     <div>
       <h1 style={{ textAlign: "center", marginTop: "4%" }}>
-        Welcome to Bread and Breakfast!
+        Welcome to Bed and Breakfast!
       </h1>
       <Grid
         container
