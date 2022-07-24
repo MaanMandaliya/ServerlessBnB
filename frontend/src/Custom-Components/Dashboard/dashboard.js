@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import { useNavigate } from "react-router-dom";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -17,6 +18,19 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 function Dashboard() {
+    const navigate = useNavigate();
+
+    const handleAction=(type)=>{
+        if(type=='food'){
+            navigate('../foodMenuList');
+        }else if(type=='tour'){
+
+        }else if(type=='room'){
+
+        }else if(type=='orderFeedback'){
+            navigate('../orderFeedback');
+        }
+    }
   return (
     <div>
       <h1 style={{ textAlign: "center", marginTop: "4%" }}>
@@ -28,7 +42,9 @@ function Dashboard() {
         justifyItems="center"
         style={{ marginTop: "80px", aligItems: "center" }}
       >
-        <Grid item xs={4} md={4} xl={4}>
+        <Grid onClick={() => {
+                    handleAction('food');
+                  }} item xs={4} md={4} xl={4}>
           <Item>
             <Card sx={{ minWidth: 275 }}>
             <CardContent>
@@ -69,6 +85,23 @@ function Dashboard() {
               </CardContent>
               <CardActions>
                 <Button size="small">Book Now</Button>
+              </CardActions>
+            </Card>
+          </Item>
+        </Grid>
+        <Grid onClick={() => {
+                    handleAction('orderFeedback');
+                  }} item xs={4} md={4} xl={4}>
+          <Item>
+            <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <Typography variant="h5" component="div"></Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Food order feedback
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Feedback</Button>
               </CardActions>
             </Card>
           </Item>
