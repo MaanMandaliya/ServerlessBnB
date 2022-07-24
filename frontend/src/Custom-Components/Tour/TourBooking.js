@@ -31,19 +31,21 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 function TourBooking() {
-    const [foodMenuList, setFoodMenuList] = useState([{"food_name":"Pasta","quantity":10,"price":15,"food_id":"2"},{"food_name":"Pizza","quantity":4,"price":25,"food_id":"1"},{"food_name":"Garlic Bread","quantity":8,"price":10,"food_id":"3"}]);
     const [open, setOpen] = useState(false);
-    const [roomNumber, setRoomNumber] = useState(0);
-    const [quantity, setQuantity] = useState(0);
-    const [tmpFood, setTempFood] = useState({});
     const [tourList,setTourList] = useState([])
     const [Days, setDays]= useState()
     const [RecommededTours,setRecommededTours]=useState([])
-    
+    const [Booking, setBooking]=useState({})
+    const [username, setusername]=useState('test')
+
     let preventApiCall=false;
     let navigate = useNavigate();
    
     useEffect(() => {
+        var user=localStorage.getItem("username")
+        if(user){
+            setusername(user)
+        }
         if(!preventApiCall){
             preventApiCall=true;
             axios.get('https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/showtours') // check and test once
@@ -57,25 +59,22 @@ function TourBooking() {
         
     }, []);
 
-    const navigateToFoodOrder=(food)=>{
-        navigate('/orderFood', { state: food });
-    }
+    const handleClickOpen = (tour) => {
+        let tourBdy={
+           "tour_name": tour.tour_name,
+           "username": username
+        };
+        console.log(username)
 
-    const handleRoomNumberChange=(room)=>{
-        console.log(room);
-        console.log(room.target.value);
-        setRoomNumber(room.target.value);
-    }
-
-    const handleQuantityChange=(qty)=>{
-        console.log(qty);
-        setQuantity(qty.target.value);
-    }
-
-
-    const handleClickOpen = (food) => {
-        console.log(food);
-        setTempFood(food);
+        axios.post('https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/booktour', tourBdy)  // call aws lmabda function to validate answers
+        .then(response => {
+            setBooking(response.data)
+            
+        })
+        .catch(erroe => {
+            console.log(erroe + " Booking failed response");
+            alert("Booking Failed");
+            });
         setOpen(true);
       };
     
@@ -83,31 +82,7 @@ function TourBooking() {
         setOpen(false);
     };
 
-    const placeAnOrder = (event) => {
-        event.preventDefault();
-        console.log(tmpFood);
-        let foodBdy={
-            "room_no": roomNumber,
-            "food_name": tmpFood.food_name,
-            "quantity": quantity
-        };
-
-        console.log(foodBdy );
-        if(roomNumber && quantity){
-            axios.post('https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/orderfood', foodBdy)  // call aws lmabda function to validate answers
-                        .then(response => {
-                            console.log("Food ordered");
-                            alert("Thank you for placing the Food order");
-                            //navigate("../login");
-                            setOpen(false);
-                        })
-                        .catch(erroe => {
-                            console.log(erroe + " Resitration failed response");
-                            alert("Registration Failed");
-                });
-        }
-       
-    }
+  
 
     function handleRecommendation(e){
         setDays(e.target.value)
@@ -128,7 +103,6 @@ function TourBooking() {
                 
                 axios(config)
                 .then(function (response) {
-                // console.log(JSON.stringify(response.data));
                 setRecommededTours(response.data);
                 })
                 .catch(function (error) {
@@ -158,8 +132,8 @@ function TourBooking() {
                             style={{ marginTop: "20px" ,marginLeft: "250px", aligItems: "center" }}
                         >
                     {   RecommededTours.slice(0,3).map((tour)=>{
-                        return(<div key={tour.tour_id} sx={{MarginLeft:"120px"}}>
-                            {console.log(tour)}
+                        return(<div key={tour[0].tour_id} sx={{MarginLeft:"120px"}}>
+                            {console.log(tour[0])}
                             <Item sx={{paddingleft:20}}>
                                 <Card sx={{ minWidth: 275}}>
                                 <CardContent>
@@ -169,9 +143,8 @@ function TourBooking() {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <button onClick={() => handleClickOpen(tour)} style={{  display: 'inline-block' }} color='inherit'>Book</button>
-                                    {/* <Button size="small">Book Now</Button> */}
-                                </CardActions>
+                                    <button onClick={() => handleClickOpen(tour[0])} style={{  display: 'inline-block' }} color='inherit'>Book</button>
+                                  </CardActions>
                                 </Card>
                                 <tr/>
                             </Item>
@@ -219,27 +192,17 @@ function TourBooking() {
             </div>
 
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Order Food</DialogTitle>
+                <DialogTitle>Booking Confirmed</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Please Enter Room Number and quantity
+                        {Booking.message}
                     </DialogContentText>
-               
-                    <div className="f-form-body">
-                        <div>
-                            <label>Room Number</label>
-                            <input type="number" value={roomNumber} name="roomNumber" onChange={handleRoomNumberChange}></input>
-                        </div>
-                        <div>
-                            <label>Quantitye</label>
-                            <input type="text" value={quantity} name="quantity" onChange={handleQuantityChange}></input>
-                        </div>
-                    </div>           
+                    <DialogContentText>
+                        {Booking.invoice}
+                    </DialogContentText>
                     </DialogContent>
                 <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <button onClick={placeAnOrder} style={{  display: 'inline-block' }} color='inherit'>Order</button>
-                {/* <Button onClick={placeAnOrder}>Submit</Button> */}
+                <Button onClick={handleClose}>OK</Button>
                 </DialogActions>
             </Dialog>
         </div>
