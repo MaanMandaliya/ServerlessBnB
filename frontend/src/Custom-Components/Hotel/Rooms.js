@@ -15,17 +15,14 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 
+
 function Rooms() {
-  const [hotelBookingList, setHotelBookingList] = useState([
-    { room_type: "Super Deluxe", room_count: 10, price: 3000, room_id: "1" },
-    { room_type: "Deluxe", room_count: 10, price: 2000, room_id: "2" },
-    { room_type: "Royal Suite", room_count: 10, price: 6500, room_id: "3" },
-  ]);
+  const [hotelBookingList, setHotelBookingList] = useState([]);
   const [open, setOpen] = useState(false);
   const [roomNumber, setRoomNumber] = useState(0);
   const [quantity, setQuantity] = useState(0);
-  const [tmpFood, setTempFood] = useState({});
-
+  const [hotelData, setHotelData] = useState({});
+  const [value, setValue] = useState(new Date("2014-08-18T21:11:54"));
   let preventApiCall = false;
   let navigate = useNavigate();
 
@@ -34,7 +31,7 @@ function Rooms() {
       preventApiCall = true;
       axios
         .get(
-          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/showfoodmenu"
+          "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/showrooms"
         ) // check and test once
         .then((response) => {
           console.log(response);
@@ -46,10 +43,9 @@ function Rooms() {
     }
   }, []);
 
-  const navigateToFoodOrder = (food) => {
-    navigate("/orderFood", { state: food });
+  const handleChange = (newValue) => {
+    setValue(newValue);
   };
-
   const handleRoomNumberChange = (room) => {
     console.log(room);
     console.log(room.target.value);
@@ -63,7 +59,7 @@ function Rooms() {
 
   const handleClickOpen = (food) => {
     console.log(food);
-    setTempFood(food);
+    setHotelData(food);
     setOpen(true);
   };
 
@@ -73,19 +69,15 @@ function Rooms() {
 
   const placeAnOrder = (event) => {
     event.preventDefault();
-    console.log(tmpFood);
-    let foodBdy = {
-      room_no: roomNumber,
-      food_name: tmpFood.food_name,
-      quantity: quantity,
-    };
+    console.log(hotelData);
+    let hotelBody = {};
 
-    console.log(foodBdy);
+    console.log(hotelBody);
     if (roomNumber && quantity) {
       axios
         .post(
           "https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/bookRoom",
-          foodBdy
+          hotelBody
         ) // call aws lmabda function to validate answers
         .then((response) => {
           console.log(response);
@@ -148,12 +140,7 @@ function Rooms() {
           <div className="f-form-body">
             <div>
               <label>From Date</label>
-              <input
-                type="number"
-                value={roomNumber}
-                name="roomNumber"
-                onChange={handleRoomNumberChange}
-              ></input>
+ 
             </div>
             <div>
               <label>To Date</label>
