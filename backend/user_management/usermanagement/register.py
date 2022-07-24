@@ -2,6 +2,7 @@ from dynamodb_connect import connect_to_dynamo
 from cognito_signup import add_to_user_pool
 import requests
 import json
+import time
 
 
 def register(body):
@@ -46,19 +47,19 @@ def register(body):
         "fields": {
             "secretkey": {
                 "stringValue": secret_key}}})
+    headers = {'Content-Type': 'application/json'}
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    # Event analytics
+    print("Tracking event now:")
+    url = "https://ac3fx6xfayf3os6luup7weoise0letuf.lambda-url.us-east-1.on.aws/"
+    payload = json.dumps({
+        "type": "registered",
+        "date": time.strftime("%Y-%m-%d")
+    })
     headers = {
         'Content-Type': 'application/json'
     }
     response = requests.request("POST", url, headers=headers, data=payload)
-
-    # Event analytics
-    url = "https://4o4ncv5ge2a44mlmovop7dgvfi0blbvg.lambda-url.us-east-1.on.aws/"
-    payload = json.dumps({
-        "event_type": "registered",
-        "sheet_id": "1qQ7WrQTKC81QWAp81twy3RWqRx-Kzzjb2KclT-gh9N4"
-    })
-    headers = {'Content-Type': 'application/json'}
-    event_analytics_response = requests.request(
-        "POST", url, headers=headers, data=payload)
 
     return {"status": "successfully registered"}
