@@ -54,9 +54,11 @@ function CaesarCipher() {
       cipherString: strToEncrypt,
       userInput: encryptedStrForm.encryptedStr,
     };
+
+    console.log(JSON.stringify(obj));
     axios
       .post(
-        "https://europe-west2-cipher-356616.cloudfunctions.net/validateCipher",
+        "https://europe-west2-cipher-356616.cloudfunctions.net/validateCipher", // change this url to Main google cloud and have cloud function there
         obj
       ) // hot cloud function to validate if entered encrypted value is same as system
       .then((response) => {

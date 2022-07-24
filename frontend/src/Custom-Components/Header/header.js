@@ -9,8 +9,16 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
+import getMsgs from "../Notification/get-all-msgs";
+import Notifications from "react-notifications-menu";
+import SingleNotification from "../Notification/SingleNotification";
+//import notificationlogo from '../../../public/images';
+//import 'bootstrap-icons/font/bootstrap-icons.css';
+
+//import 'bootstrap/dist/css/bootstrap.min.css';
 
 const pages = ["User Report", "Food Report", "Hotel Booking Report"];
 
@@ -41,11 +49,34 @@ const Header = () => {
   const logout = () => {
     localStorage.setItem("group28-logged-in", false);
     localStorage.setItem("username", "");
-    navigate("../login");
+    navigate("../dashboard");
   };
 
+  let [messages, setMessages] = useState([]);
+  let [user_email, setUserEmail] = useState([]);
+
+  const handleMessagePassing = async () => {
+    user_email = localStorage.getItem("username");
+
+    if (user_email) {
+      setUserEmail(user_email);
+    }
+    user_email = user_email.replace("@", "");
+    const response = await getMsgs({
+      user_id: "pubsub-topic-" + user_email,
+    });
+    const newMessages = response.messages.map((item, index) => ({
+      ...item,
+      index,
+    }));
+    setMessages(newMessages);
+  };
+  useEffect(() => {
+    handleMessagePassing();
+  }, []);
+
   return (
-    <AppBar sx={{ bgcolor: "#061423" }} position="static">
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -126,27 +157,27 @@ const Header = () => {
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             {/* TODO add necessary page menu options */}
-            {localStorage.getItem("group28-logged-in") == "true" && pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => {
-                  handleCloseNavMenu(page);
-                }}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
+            {localStorage.getItem("group28-logged-in") == "true" &&
+              pages.map((page) => (
+                <Button
+                  key={page}
+                  onClick={() => {
+                    handleCloseNavMenu(page);
+                  }}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page}
+                </Button>
+              ))}
           </Box>
-          {localStorage.getItem("group28-logged-in") == "true" && (
-            <Button
-              onClick={logout}
-              style={{ width: "30px", position: "absolute", right: 0 }}
-              color="inherit"
-            >
-              Hotel Booking
-            </Button>
-          )}
+
+          <Notifications
+            data={messages}
+            notificationCard={SingleNotification}
+            markAsRead={(data) => console.log("MARKASREAD --> ", data)}
+            //icon = {notificationlogo}
+          />
+
           {localStorage.getItem("group28-logged-in") == "true" ? (
             <Button
               onClick={logout}

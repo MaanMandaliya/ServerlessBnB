@@ -12,8 +12,6 @@ function Login() {
 
   let navigate = useNavigate();
 
-  // const  {authenticate}  = useContext(AccountContext);
-
   const handleFormValueChange = (event) => {
     const { name, value } = event.target;
     setValues({ ...loginForm, [name]: value });
@@ -37,7 +35,7 @@ function Login() {
 
     userToLogin.authenticateUser(authDetails, {
       onSuccess: (data) => {
-        console.log("onSuccess:", data);
+        //console.log("onSuccess:", data);
         localStorage.setItem("username", loginForm.email);
         navigate("../questionnare");
       },
@@ -45,40 +43,8 @@ function Login() {
       onFailure: (err) => {
         console.error("onFailure:", err);
         alert("Invalid credentials");
-      },
-
-      newPasswordRequired: (data) => {
-        console.log("newPasswordRequired:", data);
-      },
+      }
     });
-    /* const requestBody = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginForm)
-        }; */
-
-    //console.log("Authenticate "+authenticate)
-
-    /* authenticate(loginForm.email, loginForm.password)
-        .then(data => {
-            console.log('Logged in!', data);
-            navigate("questionnare");
-        })
-        .catch(err => {
-            console.error('Failed to login!', err);
-        }) */
-    /* fetch('https://tutorial4-api.herokuapp.com/api/users/login', requestBody)
-            .then(response => {
-                if (response.status >= 400) {
-                    throw new Error("Server responds with error!");
-                }
-                navigate("questionnare");
-                //return response.json();
-            })
-            .catch(error => {
-                console.log(error);
-                
-            }) */
   };
 
   return (

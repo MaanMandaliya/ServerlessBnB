@@ -11,14 +11,13 @@ function Questionnare() {
     if (!stopApiCall) {
       stopApiCall = true;
       fetch(
-        "https://97q5v6ha8i.execute-api.us-east-1.amazonaws.com/development/getQuestionList?username=anita.mishra2106@gmail.com"
-      ) // call lambda to get all question list
+        "https://lvwrtsyehooybptx3kusp7uxle0grarp.lambda-url.us-east-1.on.aws/questionnaire/getQuestionList?username="+localStorage.getItem("username")) // call lambda to get all question list
         .then((response) => {
           return response.json();
         })
         .then((resJson) => {
           console.log(resJson);
-          setRandomQuestion(resJson.body.question);
+          setRandomQuestion(resJson.question);
         })
         .catch((err) => {
           console.log(err);
@@ -47,11 +46,11 @@ function Questionnare() {
       [randomQuestion]: questionnaireForm.answer,
       username: localStorage.getItem("username"),
     };
-    console.log(JSON.stringify(obj) + " JJJJJ ");
+    // console.log(JSON.stringify(obj) + " JJJJJ ");
 
     axios
       .post(
-        "https://97q5v6ha8i.execute-api.us-east-1.amazonaws.com/development/validateAnswers",
+        "https://lvwrtsyehooybptx3kusp7uxle0grarp.lambda-url.us-east-1.on.aws/questionnaire/validateAnswers",
         obj
       ) // call aws lmabda function to validate answers
       .then((response) => {
