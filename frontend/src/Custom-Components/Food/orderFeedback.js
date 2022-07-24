@@ -16,12 +16,12 @@ import Paper from '@mui/material/Paper';
 import axios from "axios";
 
 function OrderFeedback() {
-    const [orderLists, setOrderList] = useState([{"food_name":"Pasta","quantity":10,"id":1},{"food_name":"Pizza","quantity":4,"id":2},{"food_name":"Garlic Bread","quantity":8,"id":3}]);
+    const [orderLists, setOrderList] = useState([]);
     const [open, setOpen] = useState(false);
     const [room_no, setRoomNo] = useState(0);
     const [food_name, setFoodName] = useState("");
     const [feedback, setFeedback] = useState("");
-
+    const [reviews, setReviews] = useState([]);
     
     let preventApiCall=false;
     let navigate = useNavigate();
@@ -34,6 +34,14 @@ function OrderFeedback() {
                     console.log(response);
                     const filteredFoodOrder=response.data.foodorders.filter((order)=> {return order.customer_id==localStorage.getItem("username")});
                     setOrderList(filteredFoodOrder);
+            }).catch(err=>{
+                console.log(err);
+            })
+            axios.get('https://7fehecfxif2nvsx4fbdjpps4dm0fncby.lambda-url.us-east-1.on.aws/foodfeedbacks') // list of food user for that user
+            .then(response =>{
+                    console.log(response);
+                    setReviews(response.data.food_feedbacks)
+                   
             }).catch(err=>{
                 console.log(err);
             })
@@ -92,6 +100,7 @@ function OrderFeedback() {
 
     return (
         <div className="list-body">
+            <h5>My Orders</h5>
             <div className="tableBdy">
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -149,6 +158,44 @@ function OrderFeedback() {
                 <button onClick={provideFeedback} style={{  display: 'inline-block' }} color='inherit'>Submit</button>
                 </DialogActions>
             </Dialog>
+            <br></br>
+            <h5>Orders Feedback</h5>
+            <div className="tableBdy">
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                            <TableRow>
+ 
+       
+                                <TableCell align="right">Feedback</TableCell>
+                                <TableCell align="right">Feedback Score </TableCell>
+                                <TableCell align="right">Action </TableCell>
+                            </TableRow>
+                            </TableHead>
+                            <TableBody>
+                            {reviews.map((review) => (
+                                <TableRow
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }} key={review.feedback_id}
+                                >
+                               
+                              
+                                <TableCell className="table-cell-style" align="right"  >
+                                    {review.feedback}
+                                </TableCell>
+
+                                <TableCell className="table-cell-style" align="right">
+                                    {review.feedback_score}
+                                </TableCell>
+                                
+                                <TableCell align="right">
+                                    <button onClick={() => handleClickOpen(review)} style={{  display: 'inline-block' }} color='inherit'>Feedback</button>
+                                </TableCell>
+                                </TableRow>
+                            ))}
+                            </TableBody>
+                        </Table>
+                </TableContainer>
+            </div>
         </div>
        
     );

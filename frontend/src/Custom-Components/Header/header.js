@@ -20,7 +20,7 @@ import SingleNotification from "../Notification/SingleNotification";
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
-const pages = ["User Report", "Food Report", "Hotel Booking Report"];
+const pages = ["User Report", "Food Report", "Hotel Booking Report","chatbot"];
 
 const Header = () => {
   const navigate = useNavigate();
@@ -34,6 +34,8 @@ const Header = () => {
       navigate("/food-report");
     } else if (page === "Hotel Booking Report") {
       navigate("/booking-report");
+    } else if (page === "chatbot") {
+      window.open("https://di6iv82snrhk9.cloudfront.net/index.html","_blank");
     }
   };
 
@@ -135,6 +137,7 @@ const Header = () => {
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
+              
             </Menu>
           </Box>
           <Typography
